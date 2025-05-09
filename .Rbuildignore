@@ -1,3 +1,5 @@
 ^gproj\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
+^README\.Rmd$
+^CODE_OF_CONDUCT\.md$

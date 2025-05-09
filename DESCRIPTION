@@ -14,3 +14,6 @@ Depends:
 LazyData: true
 URL: https://github.com/mdsumner/gproj
 BugReports: https://github.com/mdsumner/gproj/issues
+Imports: 
+    reproj,
+    S7

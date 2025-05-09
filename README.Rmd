@@ -1,0 +1,88 @@
+---
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# gproj
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of gproj is to encapsulate some map projection and grid logic. 
+
+## Installation
+
+You can install the development version of gproj from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("mdsumner/gproj")
+```
+
+## Nothing yet
+
+Here's my rough todo and examples. 
+
+```{r todo}
+# 1. an object that stores crs and just does the forward or inverse as asked
+# 2. methods that take longlat values and a family and generate a crs
+# 3. methods to find the middle of values
+# 4. methods to find the area
+#devtools::load_all()
+source("R/gproj.R")
+
+## with this S7 class we can always project or unproject (intentionally, without juggling to/from defs)
+gproj()@proj_xy(cbind(0, 0)) #no-op
+gproj("+proj=laea +lon_0=-147")@proj_xy(cbind(0, 0)) # fwd
+gproj("+proj=laea +lon_0=-147")@proj_ll(cbind(12230967.25458603, 0)) # inv
+
+omerc <- gproj("+proj=omerc +lonc=-113 +lat_0=-20 +alpha=15 +gamma=1")
+
+## this is a swath boundary
+load("data/viirs_boundary.rda")
+
+## this is just coastal/country points
+mp <- do.call(cbind, maps::map(plot = F)[1:2])
+#par(mfrow = c(2, 2), mar = rep(0, 4))
+maps::map()
+points(viirs_boundary, cex = .2, col = "firebrick")
+title("longlat")
+
+plot(omerc@proj_xy(viirs_boundary), cex = .2, col = "firebrick", asp = 1)
+points(omerc@proj_xy(mp), pch = ".")
+title("Oblique Mercator")
+
+## with params() we can provide raw data and have it figure out a sensible set of params
+(prj <- proj(params(viirs_boundary), "stere"))
+plot(gproj(prj)@proj_xy(viirs_boundary), cex = .2, col = "firebrick", asp = 1)
+points(gproj(prj)@proj_xy(mp), pch = ".")
+title("Stereographic")
+
+## if we are conic we get extra secant lat_1/lat_2 (can we do similar this for omerc ...)
+(prj <- proj(params(viirs_boundary, secant = TRUE), "lcc"))
+
+(prj <- proj(params(viirs_boundary), "ortho"))
+plot(gproj(prj)@proj_xy(viirs_boundary), cex = .2, col = "firebrick", asp = 1)
+points(gproj(prj)@proj_xy(mp), pch = ".")
+title("Orthographic")
+
+
+
+
+```
+
+## Code of Conduct
+  
+Please note that the gproj project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

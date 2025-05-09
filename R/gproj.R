@@ -1,3 +1,37 @@
+gproj <- S7::new_class(name = "gproj", package = "gproj",
+  properties = list(
+    crs = S7::new_property(class = S7::class_character, default = "EPSG:4326"),
+    proj_xy = S7::new_property(
+      class = S7::class_function, getter = function(self) {mk_proj_xy(self@crs)}),
+    proj_ll = S7::new_property(
+      class = S7::class_function, getter = function(self) {mk_proj_ll(self@crs)}
+    ))
+)
+
+
+mk_proj_xy <- function(crs) {
+  function(x) {
+    reproj::reproj_xy(x, crs, source = "EPSG:4326")
+ }
+}
+
+mk_proj_xyz <- function(crs) {
+  function(x) {
+    reproj::reproj_xyz(x, "+proj=geocent", source = "EPSG:4326")
+  }
+}
+
+mk_proj_llz <- function(crs)  {
+  function(x) {
+  reproj::reproj_xyz(x, "EPSG:4326", source = "+proj=geocent")
+  }
+}
+
+mk_proj_ll <- function(crs) {
+  function(x) {
+    reproj::reproj_xy(x, "EPSG:4326", source = crs)
+  }
+}
 area <- function(x) {
     area::polygon_area(x)
 }
@@ -36,16 +70,13 @@ proj <- function(params, family   = NULL) {
 
  paste0( sprintf("+%s", params_fold(params)), collapse = " ")
 }
-proj(params(m), "stere")
-(prj <- proj(params(m, secant = TRUE), "lcc"))
-(prj <- proj(params(m), "ortho"))
-# alpha <- seq(-50, 50, by = 5)
-# i <- 0
-# i <- i + 1
-prj <- sprintf("+proj=omerc +lonc=-113 +lat_0=-20 +alpha=%f +gamma=1", 15)
-proj_xy <- function(x) {
-    reproj::reproj_xy(x, prj, source = "EPSG:4326")
-}
-proj_ll <- function(x) {
-    reproj::reproj_xy(x, "EPSG:4326", source = prj)
-}
+# # alpha <- seq(-50, 50, by = 5)
+# # i <- 0
+# # i <- i + 1
+# prj <- sprintf("+proj=omerc +lonc=-113 +lat_0=-20 +alpha=%f +gamma=1", 15)
+# proj_xy <- function(x) {
+#     reproj::reproj_xy(x, prj, source = "EPSG:4326")
+# }
+# proj_ll <- function(x) {
+#     reproj::reproj_xy(x, "EPSG:4326", source = prj)
+# }
