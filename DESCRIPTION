@@ -12,3 +12,5 @@ RoxygenNote: 7.3.2
 Depends: 
     R (>= 3.5)
 LazyData: true
+URL: https://github.com/mdsumner/gproj
+BugReports: https://github.com/mdsumner/gproj/issues
