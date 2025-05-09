@@ -79,6 +79,12 @@ points(gproj(prj)@proj_xy(mp), pch = ".")
 title("Orthographic")
 
 
+(prj <- proj(params(viirs_boundary), "laea"))
+plot(gproj(prj)@proj_xy(viirs_boundary), cex = .2, col = "firebrick", asp = 1)
+points(gproj(prj)@proj_xy(mp), pch = ".")
+title("Lambert Azimuthal Equal-Area")
+
+
 
 
 ```

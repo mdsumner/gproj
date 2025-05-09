@@ -92,6 +92,18 @@ title("Orthographic")
 
 <img src="man/figures/README-todo-4.png" width="100%" />
 
+``` r
+
+
+(prj <- proj(params(viirs_boundary), "laea"))
+#> [1] "+proj=laea +lon_0=-113 +lat_0=-20"
+plot(gproj(prj)@proj_xy(viirs_boundary), cex = .2, col = "firebrick", asp = 1)
+points(gproj(prj)@proj_xy(mp), pch = ".")
+title("Lambert Azimuthal Equal-Area")
+```
+
+<img src="man/figures/README-todo-5.png" width="100%" />
+
 ## Code of Conduct
 
 Please note that the gproj project is released with a [Contributor Code
