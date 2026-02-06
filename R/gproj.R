@@ -73,9 +73,9 @@ params <- new_class("params",
                       lat_vals <- xy[, 2]
 
                       ## --- Centre ---
-                      ## Use column-wise mean (fine for most cases, breaks near ±180)
-                      ## TODO: circular mean for longitude when data spans antimeridian
-                      centre <- c(lon_0 = mean(lon_vals), lat_0 = mean(lat_vals))
+                      ## Use spherical (3D cartesian) centroid — robust to antimeridian and poles
+                      centre_3d <- spherical_centroid(lon_vals, lat_vals)
+                      centre <- c(lon_0 = centre_3d[1], lat_0 = centre_3d[2])
 
                       ## --- Extent ---
                       extent_ll <- c(
@@ -129,6 +129,27 @@ params <- new_class("params",
                       )
                     }
 )
+
+
+# =============================================================================
+# Spherical centroid: robust to antimeridian and poles
+# =============================================================================
+
+#' Compute the centroid of lon/lat points via 3D cartesian mean
+#'
+#' This avoids the column-mean-of-longitude problem near ±180.
+#' Returns c(lon, lat) in degrees.
+#'
+spherical_centroid <- function(lon, lat) {
+  lon_r <- lon * pi / 180
+  lat_r <- lat * pi / 180
+  x <- mean(cos(lat_r) * cos(lon_r))
+  y <- mean(cos(lat_r) * sin(lon_r))
+  z <- mean(sin(lat_r))
+  lon_out <- atan2(y, x) * 180 / pi
+  lat_out <- atan2(z, sqrt(x^2 + y^2)) * 180 / pi
+  c(lon_out, lat_out)
+}
 
 
 # =============================================================================
@@ -225,8 +246,8 @@ initial_bearing <- function(lon1, lat1, lon2, lat2) {
 #'        or a property: "equal_area", "equidistant", "conformal", "auto"
 #'
 proj <- function(p, family = "auto") {
-  lon_0 <- round(p@centre["lon_0"], 6)
-  lat_0 <- round(p@centre["lat_0"], 6)
+  lon_0 <- unname(round(p@centre["lon_0"], 6))
+  lat_0 <- unname(round(p@centre["lat_0"], 6))
 
   ## Map properties to families based on data geometry
 
@@ -307,7 +328,7 @@ auto_family <- function(p, property = NULL) {
   ## Elongated along a great circle → oblique Mercator
   if (!is.null(p@axis$variance_ratio) &&
       length(p@axis$variance_ratio) >= 2 &&
-      p@axis$variance_ratio[1] > 0.85 &&
+      p@axis$variance_ratio[1] > 0.80 &&
       p@axis$tilt > 20) {
     return("omerc")
   }
@@ -338,7 +359,7 @@ gproj_region <- function(lon, lat, radius_km = 500, property = "equal_area") {
   )
   p <- params(fake_xy)
   ## Override centre with exact values
-  p@centre <- c(lon_0 = lon, lat_0 = lat)
+  p@centre <- c(lon_0 = unname(lon), lat_0 = unname(lat))
 
   ## Get CRS
   crs_string <- proj(p, property)

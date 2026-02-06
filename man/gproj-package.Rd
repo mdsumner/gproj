@@ -4,9 +4,9 @@
 \name{gproj-package}
 \alias{gproj}
 \alias{gproj-package}
-\title{gproj: What the Package Does (One Line, Title Case)}
+\title{gproj: Projection Concierge}
 \description{
-What the package does (one paragraph).
+A 'Projection Concierge': given coordinates or a region of interest, it tells you what projection to use and gives you the transform.
 }
 \seealso{
 Useful links:

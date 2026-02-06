@@ -4,7 +4,7 @@ Version: 0.1.0
 Authors@R: 
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", role = c("aut", "cre"))
 Description: A 'Projection Concierge': given coordinates or a region of interest,
-it tells you what projection to use and gives you the transform. 
+ it tells you what projection to use and gives you the transform. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: es
