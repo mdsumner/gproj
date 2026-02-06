@@ -2,7 +2,20 @@
 <url><loc>/404.html</loc></url>
 <url><loc>/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>/authors.html</loc></url>
+<url><loc>/design.html</loc></url>
 <url><loc>/index.html</loc></url>
+<url><loc>/reference/auto_family.html</loc></url>
+<url><loc>/reference/detect_rectilinear.html</loc></url>
+<url><loc>/reference/gproj-package.html</loc></url>
+<url><loc>/reference/gproj_region.html</loc></url>
+<url><loc>/reference/grid_spec.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/initial_bearing.html</loc></url>
+<url><loc>/reference/pca_axis.html</loc></url>
+<url><loc>/reference/proj.html</loc></url>
+<url><loc>/reference/spherical_centroid.html</loc></url>
+<url><loc>/reference/test_mercator_spacing.html</loc></url>
+<url><loc>/reference/test_regular_spacing.html</loc></url>
+<url><loc>/reference/viirs_eg.html</loc></url>
 </urlset>
 
